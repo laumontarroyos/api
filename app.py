@@ -2,16 +2,28 @@ from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
 
-stores = [ 
+rpvs = [ 
     {
-    'name' : 'My Wonderful Store',
-    'items' : [
-        {
-        'name': 'My Item',
-        'price': 15.99
-        }
-    ]
+    'numero' : '10',
+    'status': 'situação 10'
+    },
+    {
+    'numero' : '20',
+    'status': 'situação 20'
+    },
+    {
+    'numero' : '30',
+    'status': 'situação 30'
+    },
+    {
+    'numero' : '40',
+    'status': 'situação 40'
+    },
+    {
+    'numero' : '50',
+    'status': 'situação 50'
     }
+    
 ]
 
 @app.route('/')     
@@ -19,48 +31,27 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/store', methods=['POST'])
-def create_store():
+@app.route('/rpv', methods=['POST'])
+def create_rpvs():
     request_data = request.get_json()
-    new_store = {
-        'name': request_data['name'],
-        'items':[]
+    new_rpv = {
+        'numero': request_data['numero'],
+        'status':'vazio'
     }
-    stores.append(new_store)
-    return jsonify(new_store)
+    rpvs.append(new_rpv)
+    return jsonify(new_rpv)
 
-@app.route('/store/<string:name>')
-def get_store(name):
-    for store in stores:
-        if store['name'] == name:
-            return jsonify({'store': store})
-    return jsonify({'message': 'Store not found!'})
+@app.route('/rpv/<string:numero>')
+def get_store(numero):
+    for rpv in rpvs:
+        if rpv['numero'] == numero:
+            return jsonify({'rpv': rpv})
+    return jsonify({'message': 'rpv não localizado!'})
     
 
-@app.route('/store')
-def get_stores():
-    return jsonify({'stores': stores})
-
-@app.route('/store/<string:name>/item', methods=['POST'])
-def create_item_in_store(name):
-    request_data = request.get_json()
-    for store in stores:
-        if store['name'] == name:
-            new_item = {
-                'name':  request_data['name'],
-                'price': request_data['price']
-            }
-            store['items'].append(new_item)
-            return jsonify({'item': new_item})
-    return jsonify({'message': 'Store not found!'})
-    
-
-@app.route('/store/<string:name>/item')
-def get_items_in_store(name):
-    for store in stores:
-        if store['name'] == name:
-            return jsonify({'items': store['items']})
-    return jsonify({'message': 'Store not found!'})
+@app.route('/rpvs')
+def get_rpvs():
+    return jsonify({'rpvs': rpvs})
 
 #@app.route('/')     #  'http://www.google.com'
 #def home():
